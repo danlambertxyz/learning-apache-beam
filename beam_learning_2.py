@@ -19,8 +19,8 @@ from apache_beam.options.pipeline_options import PipelineOptions
 import logging
 
 # Define these yourself
-input_file = 'gs://london-weather/london_weather2021-07-26_15:00:03.json'
-output_bucket = 'london-weather'
+input_file = <YOUR FILE PATH HERE> #e.g. 'gs://my-first-bucket/my_json_data.json'
+output_bucket = <YOUR BUCKET NAME HERE> #e.g. 'my-second-bucket'
 
 # Use 'with' to run the pipeline because it closes everything behind you automatically
 with beam.Pipeline() as pipeline:
@@ -39,7 +39,8 @@ with beam.Pipeline() as pipeline:
             with open(self.input_path) as fin:
                 for line in fin:
                     data = json.loads(line)
-
+                    
+                    # Manipulate the fields however you want here
                     name = str(data.get('name'))
                     coord = data.get('coord')
                     timezone = data.get('timezone')
