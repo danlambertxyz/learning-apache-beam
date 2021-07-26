@@ -8,4 +8,4 @@ Most basic exmaple of how Apache Beam works. Takes JSON data stored in-memory an
 This script uses Apache Beam to pull a JSON file from a Google Cloud Storage bucket, manipulate the data in the file, and output it as a CSV file in the same bucket. Useful for testing integration with Google Cloud.
 
 ### beam_learning_3.py
-WIP
+coming soon!
