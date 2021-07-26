@@ -18,11 +18,14 @@ import argparse
 from apache_beam.options.pipeline_options import PipelineOptions
 import logging
 
+# Define these yourself
 input_file = 'gs://london-weather/london_weather2021-07-26_15:00:03.json'
 output_bucket = 'london-weather'
 
+# Use 'with' to run the pipeline because it closes everything behind you automatically
 with beam.Pipeline() as pipeline:
 
+    # This will be the first step in the pipeline- reading the input file
     class ReadFile(beam.DoFn):
 
         def __init__(self, input_path):
@@ -45,8 +48,7 @@ with beam.Pipeline() as pipeline:
 
             yield new_data
 
-
-    # Second step in the pipeline
+    # Second step in the pipeline- writing to the output file
     class WriteCSVFile(beam.DoFn):
 
         def __init__(self, bucket_name):
@@ -61,15 +63,14 @@ with beam.Pipeline() as pipeline:
             bucket = self.client.get_bucket(self.bucket_name)
             bucket.blob(f"csv_lw.csv").upload_from_string(df.to_csv(index=False), 'text/csv')
 
-
-    # This is the pipeline
+    # Set some options so we can control things using the CLI tags
     class DataflowOptions(PipelineOptions):
-
         @classmethod
         def _add_argparse_args(cls, parser):
             parser.add_argument('--input_path', type=str, default=input_file)
             parser.add_argument('--output_bucket', type=str, default=output_bucket)
 
+    # Here's the actual pipeline
     def run(argv=None):
         parser = argparse.ArgumentParser()
         known_args, pipeline_args = parser.parse_known_args(argv)
